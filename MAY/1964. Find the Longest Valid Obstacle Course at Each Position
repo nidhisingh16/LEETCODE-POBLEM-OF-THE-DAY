@@ -1,0 +1,27 @@
+class Solution:
+    def longestObstacleCourseAtEachPosition(self, obstacles: List[int]) -> List[int]:
+        def find_rightmost_insertion_idx(arr, elem):
+            if len(arr) == 0:
+                return 0
+            left = 0
+            right = len(arr) - 1
+            while left <= right:
+                idx = (left + right) // 2
+                if elem >= arr[idx]:
+                    left = idx + 1
+                else:
+                    right = idx - 1
+            if arr[idx] <= elem:
+                return idx + 1
+            return idx
+        
+        min_end_height = []
+        ans = []
+        for obstacle in obstacles:
+            idx = find_rightmost_insertion_idx(min_end_height, obstacle)
+            if len(min_end_height) == idx:
+                min_end_height.append(obstacle)
+            else:
+                min_end_height[idx] = obstacle
+            ans.append(idx+1)
+        return ans
