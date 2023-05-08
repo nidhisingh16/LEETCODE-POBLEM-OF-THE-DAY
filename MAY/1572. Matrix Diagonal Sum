@@ -1,0 +1,14 @@
+class Solution:
+    def diagonalSum(self, mat: List[List[int]]) -> int:
+        n=len(mat)
+        sumi=0
+        l=0
+        h=n-1
+        for i in range(n):
+            if l==h:
+                sumi+=mat[i][l]
+            else:
+                sumi+=mat[i][l]+mat[i][h]
+            l+=1
+            h-=1
+        return sumi
