@@ -1,0 +1,15 @@
+class Solution:
+    def mostPoints(self, qs: List[List[int]]) -> int:
+        n = len(qs)
+        dp = [-1 for _ in range(n)]
+        def f(i):
+            if i >= n: return 0 
+            else:
+                if dp[i] + 1: return dp[i] 
+                take = f(i+qs[i][1]+1) + qs[i][0]
+
+                miss = f(i+1) + 0
+
+                dp[i] = max(take, miss)
+                return dp[i]
+        return f(0) 
