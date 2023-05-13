@@ -1,0 +1,11 @@
+class Solution:
+    def countGoodStrings(self, low: int, high: int, zero: int, one: int) -> int:
+        
+        MOD = 10 ** 9 + 7
+        
+        @cache
+        def dfs(i):
+            if i > high: return 0
+            return (int(i >= low) + dfs(i + zero) + dfs(i + one)) % MOD
+        
+        return dfs(0)
