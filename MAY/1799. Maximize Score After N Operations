@@ -1,0 +1,26 @@
+class Solution:
+    def maxScore(self, nums: List[int]) -> int:
+        n: int = len(nums) // 2
+        ans: int = 0
+        groups: List[List[int]] = []
+        
+        def f(nums: List[int], prev: List[int]) -> None:
+            
+            if len(nums) == 0:
+                groups.append(prev)
+                return
+            
+            x: int = nums[0]
+            for i in range(1, len(nums)):
+                y: int = nums[i]
+                f(nums[1: i] + nums[i + 1:], prev + [gcd(x, y)])
+
+        f(nums, [])
+        for group in groups:
+            group.sort()
+            val: int = 0
+            for i in range(1, n + 1):
+                val += i * group[i - 1]
+            ans = max(ans, val)
+
+        return ans
