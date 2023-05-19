@@ -1,0 +1,26 @@
+from collections import deque
+
+class Solution:
+    def isBipartite(self, graph: List[List[int]]) -> bool:
+
+        color = [-1] * len(graph)
+
+        for i, n in enumerate(color):
+            if n != -1:
+                continue
+
+            bfs = deque([(i, 1)])
+            while bfs:
+                ele, clr = bfs.popleft()
+                if color[ele] != -1 and color[ele] != clr:
+                    return False
+                
+                if color[ele] != -1:
+                    continue
+
+                color[ele] = clr
+                
+                for nxt in graph[ele]:
+                    bfs.append((nxt, 1 if clr == 0 else 0))
+        
+        return True
