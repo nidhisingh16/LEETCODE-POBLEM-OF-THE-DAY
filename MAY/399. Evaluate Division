@@ -1,0 +1,37 @@
+class Solution:
+    def calcEquation(self, equations: List[List[str]], values: List[float], queries: List[List[str]]) -> List[float]:
+        graph = {}
+        for i in range(len(values)):
+            a, b = equations[i]
+            if a in graph:
+                graph[a][b] = values[i]
+            else:
+                graph[a] = {b : values[i]}
+            if b in graph:
+                graph[b][a] = 1/values[i]
+            else:
+                graph[b] = {a : 1/values[i]}
+
+        sol = []
+        for a, b in queries:
+            if a not in graph or b not in graph:
+                sol.append(-1.0)
+            else:
+                # Stack DFS for full ratio using piecewise ratios
+                stack = [(a, 1.0)]
+                visited = {a}
+                found = False
+                while stack:
+                    curr, ratio = stack.pop()
+                    if curr == b:
+                        sol.append(ratio)
+                        found = True
+                        break
+                    for nxt, nxtRatio in graph[curr].items():
+                        if nxt not in visited:
+                            visited.add(nxt)
+                            stack.append((nxt, ratio * nxtRatio))
+                if not found:
+                    sol.append(-1.0)
+
+        return sol
