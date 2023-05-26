@@ -1,0 +1,25 @@
+class Solution:
+    def stoneGameII(self, piles: List[int]) -> int:
+        N = len(piles)
+        memo = {}
+        def dfs(i: int, M: int, isAlice: bool):
+            # base case: alice or bob can pick all remaining piles
+            if i >= N - 2 * M:
+                s = sum(piles[i:])
+                return (s, 0) if isAlice else (0, s)
+            
+            # recursive step: each player will maximize its gain
+            if (i, M, isAlice) not in memo:
+                s, a, b = 0, float('-inf'), float('-inf')
+                for j in range(i, i + 2 * M):
+                    s += piles[j]
+                    nxt = dfs(j + 1, max(M, j - i + 1), not isAlice)
+                    if isAlice and s + nxt[0] > a:
+                        a, b = s + nxt[0], nxt[1]
+                    elif not isAlice and s + nxt[1] > b:
+                        a, b = nxt[0], s + nxt[1]
+                memo[i, M, isAlice] = (a, b)
+            
+            return  memo[i, M, isAlice]
+        
+        return dfs(0, 1, True)[0]
