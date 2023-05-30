@@ -1,0 +1,75 @@
+class MyHashSet:
+    def __init__(self):
+        self.hashset = [None for _ in range(100)]
+
+    def __hash(self, key: int) -> int:
+        return key % 100
+
+    def add(self, key: int) -> None:
+        h = self.__hash(key)
+
+        node = Node(key)
+
+        if self.hashset[h] is not None:           
+            current = self.hashset[h]
+
+            if current.key == key:
+                return
+
+            while current.next is not None:
+                if current.key == key:
+                    print('stoping: ', key)
+                    return
+
+                current = current.next
+            
+            current.next = node
+        else:
+            self.hashset[h] = node
+
+    def remove(self, key: int) -> None:
+        h = self.__hash(key)
+       
+        if self.hashset[h] is None:
+            return
+
+        slow = self.hashset[h]
+        fast = self.hashset[h].next
+
+        if slow.key == key:
+            self.hashset[h] = slow.next
+            return
+
+        while fast is not None:
+            if fast.key == key:
+                break
+
+            fast = fast.next
+            slow = slow.next
+        
+        if fast is None:
+            return
+            
+        slow.next = fast.next
+                
+
+    def contains(self, key: int) -> bool:
+        h = self.__hash(key)
+
+        if self.hashset[h] is None:
+            return False
+        
+        current = self.hashset[h]
+
+        while current is not None:
+            if current.key == key:
+                return True
+            
+            current = current.next
+
+        return False
+
+class Node:
+    def __init__(self, key: int):
+        self.key = key
+        self.next = None
